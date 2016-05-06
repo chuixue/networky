@@ -1,9 +1,27 @@
 "use strict";
 
 
-
-
-var networky=function(){
+var networky = function(){
+	this.Graph = function(){
+		return new GraphY();
+	}
+	this.karate_club_graph = function(){
+		var lks = "2 1,3 1,3 2,4 1,4 2,4 3,5 1,6 1,7 1,7 5,7 6,8 1,8 2,8 3,8 4,9 1,9 3,10 3,11 1,11 5,11 6,12 1,13 1,13 4,"+
+				"14 1,14 2,14 3,14 4,17 6,17 7,18 1,18 2,20 1,20 2,22 1,22 2,26 24,26 25,28 3,28 24,28 25,29 3,30 24,"+
+				"30 27,31 2,31 9,32 1,32 25,32 26,32 29,33 3,33 9,33 15,33 16,33 19,33 21,33 23,33 24,33 30,33 31,33 32,"+
+				"34 9,34 10,34 14,34 15,34 16,34 19,34 20,34 21,34 23,34 24,34 27,34 28,34 29,34 30,34 31,34 32,34 33";
+		var G=new GraphY();
+		var eds = lks.split(",");
+		eds.forEach(function(d, i){
+			var tuple = d.split(" ");
+			G.add_edge([tuple[0], tuple[1]]);	
+		});
+		return G;
+	}		
+	
+};
+var ny = new networky();
+var GraphY = function(){
 	/*
 	nodes		[ { key: b, _delete:0, id:index, lsChild:[], label: key } ]
 	edges		[ [aI, bI, key2] ]
@@ -30,7 +48,7 @@ var networky=function(){
 			this._add_edge_object(a, b, weight);
 		}
 	};
-	//the common way to create network
+	/* the common way to create network */
 	this._add_edge_string = function(a, b, weight){
 		if(a == b)return;
 		var nd = [a, b], inx = [-1, -1];
@@ -60,7 +78,7 @@ var networky=function(){
 			}
 		}
 	};
-	//complex way to create network
+	/* complex way to create network */
 	this._add_edge_object = function(a, b, weight){
 		console.error("we have not implemented this type");
 	}
@@ -308,11 +326,12 @@ var networky=function(){
 		}) };
 	}
 	this.draw = function(id){
+		
 		var div=d3.select("#"+id), width=parseInt(div.style("width")), height=parseInt(div.style("height")),
 			color = d3.scale.category10(), graph = this.get_graph_d3();
 		var force = d3.layout.force().charge(-280).linkDistance(30).size([width, height]);
 		var svg = d3.select("#" + id).append("svg").attr("width", width).attr("height", height);
-		
+		cout(graph);
 		force.nodes(graph.nodes).links(graph.links).start();
 		
 		var link = svg.selectAll(".link")
@@ -391,22 +410,18 @@ var networky=function(){
 	}
 	var __get_rand = function(ary){
 		return ary[Math.floor( Math.random() * ary.length )];
-	}	
+	}
+
 };
-var n=new networky();
-var ttt = "2 1,3 1,3 2,4 1,4 2,4 3,5 1,6 1,7 1,7 5,7 6,8 1,8 2,8 3,8 4,9 1,9 3,10 3,11 1,11 5,11 6,12 1,13 1,13 4,14 1,14 2,14 3,14 4,17 6,17 7,18 1,18 2,20 1,20 2,22 1,22 2,26 24,26 25,28 3,28 24,28 25,29 3,30 24,30 27,31 2,31 9,32 1,32 25,32 26,32 29,33 3,33 9,33 15,33 16,33 19 ,33 21,33 23,33 24,33 30,33 31,33 32,34 9,34 10,34 14,34 15,34 16,34 19,34 20,34 21,34 23,34 24,34 27,34 28,34 29,34 30,34 31,34 32,34 33";
-var tpp = ttt.split(",");
-tpp.forEach(function(d, i){
-	var t = d.split(" ");
-	n.add_edge([t[0], t[1]]);	
-});
+/*
+var n=ny.karate_club_graph();
 /*
 n.add_edge(["2", "3", 4]);
 n.add_edge(["4", "3", 5]);
 n.add_edge(["3", "5", 5]);
 n.add_edge(["3", "5", 6]);
 n.add_edge(["3", "5", 6]);
-*/
+
 console.log(n.nodes());
 //console.log(n.edges(true));
 console.log(n.degree());
@@ -461,3 +476,5 @@ n.debug();
 //console.log(JSON.stringify(dt1)==JSON.stringify(dt2));
 
 //alert(n.nodes.length)
+
+*/
